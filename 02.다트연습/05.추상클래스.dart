@@ -218,9 +218,6 @@ class JunHo extends Namja with Hobby, Singer{
 
 
 
-
-
-
 //// 테스트를 수행하는 함수 /////
 void testClass(){
   // 추상클래스를 구현한 경수클래스 인스턴스생성
@@ -233,21 +230,25 @@ void testClass(){
   // print(KyungSu().eat());
   // print(KyungSu().say());
 
-  // 추상클래스를 일반 상속받은 지현클래스 인스턴스 생성
+  // 추상클래스를 일반 상속받은 
+  // 지현클래스 인스턴스 생성
   JeeHyun jh = JeeHyun('남지현');
   print(jh.age());
   print(jh.gender());
   print(jh.eat()); 
-  // 재정의 안한 메서드는 Saram의 원본 메서드가 출력됨!
+  // 재정의 안한 메서드는 
+  // Saram의 원본 메서드가 출력됨!
   print('\n');
 
-  // 추상클래스의 추상클래스를 상속한 서준클래스 인스턴스 생성
+  // 추상클래스의 추상클래스를 상속한 
+  // 서준클래스 인스턴스 생성
   SeoJun sj = SeoJun('박서준');
   print(sj.age());
   print(sj.eat());
   print('\n');
 
-  // 추상클래스의 추상클래스를 상속한 준호클래스 인스턴스 생성
+  // 추상클래스와 여러 믹스인 클래스를 상속받은 준호클래스
+  // 인스턴스 생성하기
   JunHo jho = JunHo('이준호');
   print(jho.gender());
   print(jho.age());
@@ -261,3 +262,4 @@ main(){
   testClass();
 
 } /////////// main ////////////////
+
