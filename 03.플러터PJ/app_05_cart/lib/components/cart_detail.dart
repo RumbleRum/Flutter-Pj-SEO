@@ -41,12 +41,36 @@ class _CartDetailState extends State<CartDetail> {
     "Tesla Model3",
     "Cessna 150",
   ];
-  // 상품가격 리스트 [ 가격, 조회수, 별수 ]
+  // 상품정보 리스트 [ 가격, 조회수, 별수 ]
   Map<String, List> goodsInfo = {
     "Living bicycle": [699, 26, 5],
     "Honda motorcycle": [1700, 35, 7],
     "Tesla Model3": [7800, 98, 9],
     "Cessna 150": [12400, 75, 6],
+  };
+
+  // 상품섹상 리스트
+  Map<String, List> goodsColor = {
+    "Living bicycle": [
+      Colors.red,
+      Colors.blue,
+    ],
+    "Honda motorcycle": [
+      Colors.yellow,
+      Colors.pink,
+    ],
+    "Tesla Model3": [
+      Colors.deepOrange,
+      Colors.greenAccent,
+      Colors.blueGrey,
+      Colors.green,
+    ],
+    "Cessna 150": [
+      Color.fromARGB(255, 201, 28, 114),
+      Colors.deepPurple,
+      Colors.purpleAccent,
+      Colors.purple,
+    ],
   };
 
   // 빌드 재정의!!!
@@ -166,10 +190,11 @@ class _CartDetailState extends State<CartDetail> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Row(
-        // 메인축 정렬 양쪽끝 사이간격주기
+        // 메인축 정렬 양쪽끝(사이간격만 주기)
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 상품명
+          // 1.상품명 : selectedTit 리스트형 변수값 읽어옴
+          // sequenceNum의 순번값이 변경될때 이것도 업데이트됨!!!
           Text(
             selectedTit[sequenceNum],
             style: TextStyle(
@@ -177,9 +202,9 @@ class _CartDetailState extends State<CartDetail> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          // 상품가격
-          // 달러는 특수문자
+          // 2. 상품가격 : selectedPrice
           Text(
+            // 달러($)는 특수문자니까 역슬래쉬를 같이 씀!
             '\$${goodsInfo[selectedTit[sequenceNum]]?[0]}',
             style: TextStyle(
               fontSize: 18,
@@ -197,20 +222,20 @@ class _CartDetailState extends State<CartDetail> {
       padding: const EdgeInsets.only(bottom: 20.0),
       child: Row(
         children: [
-          //별 한계수 제어 for문을써줌
+          // 여기에 for반복문을 쓰면 위젯을 반복할 수 있다!!!
+          // 한계수가 별의 개수를 제어하므로
+          // 셋팅된 별수 정보를 한계수에 넣어준다!
           for (int i = 0; i < goodsInfo[selectedTit[sequenceNum]]?[2]; i++)
-            Icon(
-              Icons.star,
-              color: Colors.pink,
-            ),
-            // 사이간격밀기
-            Spacer(),
-            // 리뷰수 보이기
-            Text(
+            Icon(Icons.star, color: Colors.pink),
+          // 사이간격 밀기
+          Spacer(),
+          // 리뷰수 보이기
+          Text(
+            // 달러($)는 특수문자니까 역슬래쉬를 같이 씀!
             'review(${goodsInfo[selectedTit[sequenceNum]]?[1]})',
             style: TextStyle(
               fontSize: 18,
-              color: Colors.red,
+              color: Colors.blue,
             ),
           ),
         ],
@@ -218,11 +243,41 @@ class _CartDetailState extends State<CartDetail> {
     );
   } ////////// _buildStarReview  메서드 //////////
 
-Widget _buildDetailIcon(Color mColor) {
+  // 3. 옵션 위젯 만들기 메서드 : _buildOption()
+  Widget _buildOption() {
+    // 선택색상정보 셋업하기
+    dynamic selectedColor = goodsColor[selectedTit[sequenceNum]];
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("색상 옵션"),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              // 둥근모양의 색상 아이콘 메서드 호출
+              // 선택된 색상옵션은 리스트형으로 for문으로 돌려줌
+              for (int i = 0; i < selectedColor.length; i++)
+                _buildDetailIcon(selectedColor[i]),
+            ],
+          )
+        ],
+      ),
+    );
+  } ////////// _buildOption  메서드 //////////
+
+  // 둥근 아이콘 만들기 함수
+  Widget _buildDetailIcon(Color mColor) {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       // 5. Stack의 첫 번째 Container 위젯위에 Positioned 위젯이 올라가는 형태
       child: Stack(
+        // 스택위젯은 겹쳐지는 디자인을 할떄사용
+        // 스택은 아래로부터 위로 겹쳐저서 쌓이는 형태를이룸
+        // 내부에 겹처질 위젯은 포지션드 위젯을 사용
+        // 이 위젯은 css 앱솔루트 포지션과 유사
         children: [
           Container(
             width: 50,
@@ -233,9 +288,11 @@ Widget _buildDetailIcon(Color mColor) {
               shape: BoxShape.circle,
             ),
           ),
+          // 겹쳐질 위젯 넣기
           Positioned(
             left: 5,
             top: 5,
+            // ClipOval 둥근모양위젯 (잘라줌)
             child: ClipOval(
               child: Container(
                 color: mColor,
@@ -249,28 +306,49 @@ Widget _buildDetailIcon(Color mColor) {
     );
   }
 
-
-  // 3. 옵션 위젯 만들기 메서드 : _buildOption()
-  Widget _buildOption() {
-    return Padding(padding: const EdgeInsets.only(bottom: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("색상 옵션"),
-          SizedBox(height: 10),
-          Row(
-            children: [
-              // 듕근모양 쎽상 아이콘 메서드
-              
-            ],
-          )
-        ],
-      ),
-    );
-  } ////////// _buildOption  메서드 //////////
-
   // 4. 버튼 위젯 만들기 메서드 : _buildButton()
   Widget _buildButton() {
-    return Padding(padding: const EdgeInsets.only(bottom: 10.0));
+    return Align(
+      child: TextButton(
+        onPressed: () {
+          // 장바구니 담기 확인 메시지창 쿠퍼티노 다이얼로그 사용
+          showCupertinoDialog(
+            // 앱 현재 통합정보 context
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
+              // 대화창 메시지
+              title: Text('장바구니에 담았읍니다.'),
+              // 팝업창 버튼 터치시 작동 동작액션
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () {
+                    // 팝으로 콘텍스트 보내면 대화창 닫힘
+                    Navigator.pop(context);
+                  },
+                  // 대화창 구성버튼
+                  child: Text(
+                    "어 그래 형이야",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+        style: TextButton.styleFrom(
+            // 배경색
+            backgroundColor: kAccentColor,
+            // 최소사이즈
+            minimumSize: Size(300, 50),
+            // 둥근모서리
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            )),
+        child: Text(
+          '버튼 누르지마 슈발!!!',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
   } ////////// _buildButton  메서드 //////////
 } ///////////// _CartDetailState 클래스 /////////
