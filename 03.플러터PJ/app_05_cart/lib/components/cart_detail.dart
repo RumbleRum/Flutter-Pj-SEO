@@ -45,7 +45,7 @@ class _CartDetailState extends State<CartDetail> {
   Map<String, List> goodsInfo = {
     "Living bicycle": [699, 26, 5],
     "Honda motorcycle": [1700, 35, 7],
-    "Tesla Model3": [7800, 98, 3],
+    "Tesla Model3": [7800, 98, 9],
     "Cessna 150": [12400, 75, 6],
   };
 
@@ -197,19 +197,76 @@ class _CartDetailState extends State<CartDetail> {
       padding: const EdgeInsets.only(bottom: 20.0),
       child: Row(
         children: [
-          for (int i = 0; i < 6; i++)
+          //별 한계수 제어 for문을써줌
+          for (int i = 0; i < goodsInfo[selectedTit[sequenceNum]]?[2]; i++)
             Icon(
               Icons.star,
               color: Colors.pink,
             ),
+            // 사이간격밀기
+            Spacer(),
+            // 리뷰수 보이기
+            Text(
+            'review(${goodsInfo[selectedTit[sequenceNum]]?[1]})',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.red,
+            ),
+          ),
         ],
       ),
     );
   } ////////// _buildStarReview  메서드 //////////
 
+Widget _buildDetailIcon(Color mColor) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      // 5. Stack의 첫 번째 Container 위젯위에 Positioned 위젯이 올라가는 형태
+      child: Stack(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(),
+              shape: BoxShape.circle,
+            ),
+          ),
+          Positioned(
+            left: 5,
+            top: 5,
+            child: ClipOval(
+              child: Container(
+                color: mColor,
+                width: 40,
+                height: 40,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+
   // 3. 옵션 위젯 만들기 메서드 : _buildOption()
   Widget _buildOption() {
-    return Padding(padding: const EdgeInsets.only(bottom: 10.0));
+    return Padding(padding: const EdgeInsets.only(bottom: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("색상 옵션"),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              // 듕근모양 쎽상 아이콘 메서드
+              
+            ],
+          )
+        ],
+      ),
+    );
   } ////////// _buildOption  메서드 //////////
 
   // 4. 버튼 위젯 만들기 메서드 : _buildButton()
